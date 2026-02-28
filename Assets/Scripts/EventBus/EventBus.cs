@@ -2,8 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EventType { 
-    
+public enum EventType {
+
+    Time_Rewind_Start,// 回溯开始
+    Time_Rewind_End,
+    Time_Slow_Start, // 减速开始
+    Time_Slow_End,
+    Time_FastForward_Start, // 快进开始
+    Time_FastForward_End
+
 }
 public class EventBus 
 {
