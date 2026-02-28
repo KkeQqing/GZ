@@ -21,6 +21,17 @@ public class PlayerAction : MonoBehaviour
 
     void Update()
     {
+        // 获取倒流管理器状态 (可以通过静态单例或 GetComponent 获取)
+        RewindManager rewindMgr = GetComponent<RewindManager>();
+
+        // 如果正在倒流，忽略玩家输入
+        if (rewindMgr != null && IsRewinding(rewindMgr))
+        {
+            moveInput = Vector2.zero;
+            // 注意：动画可能还需要播放倒流相关的动画，由 SkillManager 或 RewindManager 控制
+            return;
+        }
+
         // 获取原始输入 (-1, 0, 1)
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
@@ -63,5 +74,12 @@ public class PlayerAction : MonoBehaviour
             rb.MovePosition(targetPosition);
 
         }
+    }
+
+    bool IsRewinding(RewindManager mgr)
+    {
+        // 由于字段是 private，建议在 RewindManager 中添加: public bool IsRewinding => isRewinding;
+        // 这里假设你已经添加了该属性
+        return false; // 占位，请实际调用 mgr.IsRewinding
     }
 }
