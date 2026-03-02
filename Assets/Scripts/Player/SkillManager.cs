@@ -4,7 +4,7 @@ using UnityEngine;
 public class SkillManager : MonoBehaviour
 {
     public Animator animator;
-    public RewindManager rewindManager;
+    public GlobalRewindManager globalRewindManager; // 拖入场景中的 Manager
 
     // 缓存引用
     private TimeControlManager timeManager;
@@ -12,7 +12,6 @@ public class SkillManager : MonoBehaviour
     void Awake()
     {
         if (animator == null) animator = GetComponent<Animator>();
-        rewindManager = GetComponent<RewindManager>();
         timeManager = FindObjectOfType<TimeControlManager>();
 
         if (timeManager == null)
@@ -23,15 +22,6 @@ public class SkillManager : MonoBehaviour
 
     void Update()
     {
-        // 如果正在倒流，禁止释放其他技能，防止逻辑冲突
-        if (rewindManager != null)
-        {
-            // 可以通过反射或公共属性检查 isRewinding，这里简化处理
-            // 假设 RewindManager 内部已经处理了输入屏蔽，或者我们在协程里屏蔽
-        }
-
-        // 注意：Input 检测在 timeScale 变慢时，帧率会变低，但 Input.GetKeyDown 依然会在按键按下那一帧触发，
-        // 不过由于游戏变慢，玩家感觉反应时间变长了，这符合设计预期。
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -43,16 +33,15 @@ public class SkillManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.R))
         {
-            // R 键触发倒流
-            if (rewindManager != null)
+            if (globalRewindManager != null)
             {
-                // 可以播放一个特殊的倒流动画
+                // 播放玩家自己的倒流动画（如果有），比如做一个双手划时间的动作
                 if (animator) animator.SetTrigger("AttackR");
-                rewindManager.StartRewind();
-            }
-            else
-            {
-                Debug.LogError("未找到 RewindManager 组件！");
+
+                // 触发全局倒流
+                globalRewindManager.StartGlobalRewind();
+
+                Debug.Log("发动技能：世界回溯！");
             }
         }
     }
