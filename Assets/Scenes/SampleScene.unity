@@ -215,6 +215,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &377747159
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 377747161}
+  - component: {fileID: 377747162}
+  m_Layer: 0
+  m_Name: GlobalRewindManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &377747161
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377747159}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.48491028, y: 2.1411245, z: -0.06534959}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &377747162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377747159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0b7dd01df7f4984a831daaa3e35a552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rewindDuration: 3
+  rewindSpeedMultiplier: 1
+  isRewinding: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1177432529}
-  rewindManager: {fileID: 0}
+  globalRewindManager: {fileID: 0}
 --- !u!114 &1177432531
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,10 +568,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9ff1e7c70a82e4cab363bfa97ab6cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rewindDuration: 1
-  rewindPlaybackSpeed: 6
-  rb: {fileID: 0}
-  animator: {fileID: 0}
 --- !u!1 &1216556843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1582,6 +1625,7 @@ GameObject:
   - component: {fileID: 1815948467}
   - component: {fileID: 1815948466}
   - component: {fileID: 1815948469}
+  - component: {fileID: 1815948470}
   m_Layer: 0
   m_Name: monst
   m_TagString: Untagged
@@ -1689,10 +1733,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9ff1e7c70a82e4cab363bfa97ab6cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rewindDuration: 1
-  rewindPlaybackSpeed: 2
-  rb: {fileID: 0}
-  animator: {fileID: 0}
+--- !u!114 &1815948470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1815948465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5c599147c69b14d9ca2a26dcd66b88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  restoreVelocity: 1
+  maxFrames: 150
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1702,3 +1756,4 @@ SceneRoots:
   - {fileID: 1177432527}
   - {fileID: 1815948468}
   - {fileID: 364016258}
+  - {fileID: 377747161}
