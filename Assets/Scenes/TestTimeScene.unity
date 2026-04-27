@@ -1233,7 +1233,7 @@ MonoBehaviour:
   postRewindPause: 0.5
   rewindForwardDuration: 0
   rewindForwardSpeed: 1
-  debugMode: 1
+  debugMode: 0
   isRewinding: 0
   currentPhase: 0
 --- !u!4 &1446173264
