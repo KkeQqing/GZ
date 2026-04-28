@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject); // 如果已经存在一个实例，销毁新的实例
         }
+
+        UIManager.Instance.Open(UIType.MainMenu);
     }
 
     public void StartGame()

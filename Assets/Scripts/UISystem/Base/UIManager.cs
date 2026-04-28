@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-1)]
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
@@ -56,4 +57,25 @@ public class UIManager : MonoBehaviour
         if (uiStack.Count > 0)
             uiStack.Peek().Show();
     }
+
+    // 新增：支持指定类型关闭
+    public void Close(UIType type)
+    {
+        if (!uiDict.ContainsKey(type)) return;
+
+        // 如果栈顶不是要关闭的那个，说明它不在最上面，逻辑上可能需要处理
+        // 但为了简单，我们直接从栈里移除（这里逻辑较复杂，建议先用方案一）
+
+        // 简单的做法：如果栈顶是它，就弹出
+        if (uiStack.Count > 0 && uiStack.Peek().uiType == type)
+        {
+            BaseUI top = uiStack.Pop();
+            top.Hide();
+
+            // 恢复前一个
+            if (uiStack.Count > 0)
+                uiStack.Peek().Show();
+        }
+    }
+
 }
