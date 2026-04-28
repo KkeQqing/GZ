@@ -2,6 +2,7 @@
 
 public class PauseUI : BaseUI
 {
+    // 继续游戏
     public void OnResume()
     {
         GameManager.Instance.TogglePause();
