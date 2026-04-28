@@ -20,14 +20,26 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject); // 如果已经存在一个实例，销毁新的实例
         }
 
-        UIManager.Instance.Open(UIType.MainMenu);
+    }
+
+    void Start()
+    {
+        if (UIManager.Instance != null)
+        {
+            Debug.Log("尝试打开主菜单...");
+            UIManager.Instance.Open(UIType.MainMenu);
+        }
+        else
+        {
+            Debug.LogError("UIManager 没找到！");
+        }
     }
 
     public void StartGame()
     {
         if(debugMode)Debug.Log("Starting Game...");
+        UIManager.Instance.Close(UIType.MainMenu);
         UIManager.Instance.Open(UIType.HUD);
-        UIManager.Instance.Close(); // 关闭主菜单
     }
 
     // 暂停游戏

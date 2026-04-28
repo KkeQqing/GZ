@@ -4,6 +4,16 @@ public abstract class BaseUI : MonoBehaviour
 {
     public UIType uiType;
 
+    void Awake()
+    {
+        Debug.Log($"[BaseUI] 正在注册: {uiType}"); // <--- 加上这行
+        // 注册自己
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.Register(this);
+        }
+    }
+
     public virtual void Init() { }
 
     public virtual void Show()
