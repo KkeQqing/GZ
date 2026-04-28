@@ -6,6 +6,7 @@ public class PauseUI : BaseUI
     public void OnResume()
     {
         GameManager.Instance.TogglePause();
+        UIManager.Instance.Close();
     }
 
     public void OnSettings()
