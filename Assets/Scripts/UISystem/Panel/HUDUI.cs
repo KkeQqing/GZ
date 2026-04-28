@@ -9,4 +9,10 @@ public class HUDUI : BaseUI
     {
         hpBar.fillAmount = current / max;
     }
+
+    public void OnPause()
+    {
+        GameManager.Instance.TogglePause();
+        UIManager.Instance.Open(UIType.Pause);
+    }
 }

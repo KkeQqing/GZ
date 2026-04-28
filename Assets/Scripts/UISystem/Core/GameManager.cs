@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // 开始游戏
     public void StartGame()
     {
         if(debugMode)Debug.Log("Starting Game...");
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
         else
             UIManager.Instance.Close();
     }
+
+
 
     public void TestClick()
     {

@@ -16,4 +16,8 @@ public class MainMenuUI : BaseUI
     {
         UIManager.Instance.Open(UIType.Codex);
     }
+    public void OnSettings()
+    {
+        UIManager.Instance.Open(UIType.Settings);
+    }
 }

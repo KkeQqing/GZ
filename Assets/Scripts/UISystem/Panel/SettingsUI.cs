@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingUI : BaseUI
+public class SettingsUI : BaseUI
 {
     public Slider volumeSlider;
 

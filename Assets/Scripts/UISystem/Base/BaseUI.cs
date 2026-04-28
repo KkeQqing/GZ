@@ -6,7 +6,7 @@ public abstract class BaseUI : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log($"[BaseUI] 正在注册: {uiType}"); // <--- 加上这行
+        Debug.Log($"[BaseUI] 正在注册: {uiType}"); 
         // 注册自己
         if (UIManager.Instance != null)
         {
