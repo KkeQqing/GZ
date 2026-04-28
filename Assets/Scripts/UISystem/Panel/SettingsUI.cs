@@ -27,4 +27,9 @@ public class SettingsUI : BaseUI
     {
         volumeSlider.value = 1f;
     }
+
+    public void OnBack()
+    {
+        UIManager.Instance.Close();
+    }
 }
