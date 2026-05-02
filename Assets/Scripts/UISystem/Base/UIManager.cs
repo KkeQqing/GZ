@@ -78,4 +78,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // 安全获取UI实例的方法
+    public BaseUI GetUI(UIType type)
+    {
+        if (uiDict.TryGetValue(type, out var ui))
+        {
+            return ui;
+        }
+        return null;
+    }
+
 }

@@ -7,51 +7,48 @@ using TMPro;
 public class DialogueUI : BaseUI
 {
     [Header("场景引用")]
-    public TextMeshProUGUI speakerNameText; // 说话人名字
-    public TextMeshProUGUI dialogueText;    // 对话文本
-    public Image portrait;                  // 立绘
-    public Button nextBtn;                  // Next按钮
-    public Toggle autoToggle;               // 自动模式开关
+    public TextMeshProUGUI speakerNameText;
+    public TextMeshProUGUI dialogueText;
+    public Image portrait;
+    public Button nextBtn;
+    public Toggle autoToggle;
 
     [Header("设置")]
-    public float typeSpeed = 0.05f; // 打字机速度（每个字的间隔）
-    public float autoDelay = 1.5f;  // 自动模式下的停留时间
+    public float typeSpeed = 0.05f;
+    public float autoDelay = 1f;
 
     private Queue<DialogueLine> dialogueQueue = new Queue<DialogueLine>();
-    private bool isTyping;      // 是否正在打字
-    private bool autoMode;      // 是否自动模式
-    private Coroutine autoCoroutine;
+    private bool isTyping;
+    private Coroutine autoWaitCoroutine; // 自动等待协程
 
     private void Awake()
     {
-        // 绑定按钮事件
         nextBtn.onClick.AddListener(OnNextClicked);
-        autoToggle.onValueChanged.AddListener(ToggleAutoMode);
+        autoToggle.onValueChanged.AddListener(OnAutoToggleChanged);
     }
 
-    // 打开对话界面时初始化
     protected override void OnShow()
     {
         base.OnShow();
-        // 初始化状态
         isTyping = false;
         dialogueText.text = "";
         speakerNameText.text = "";
         portrait.sprite = null;
+
+        if (autoWaitCoroutine != null)
+            StopCoroutine(autoWaitCoroutine);
+        autoWaitCoroutine = null;
     }
 
-    // 开始对话（外部调用，传入对话列表）
     public void StartDialogue(List<DialogueLine> dialogue)
     {
         dialogueQueue.Clear();
         foreach (var line in dialogue)
-        {
             dialogueQueue.Enqueue(line);
-        }
+
         ShowNextLine();
     }
 
-    // 显示下一句
     void ShowNextLine()
     {
         if (dialogueQueue.Count == 0)
@@ -60,25 +57,19 @@ public class DialogueUI : BaseUI
             return;
         }
 
-        // 取出下一句
         var line = dialogueQueue.Dequeue();
-
-        // 更新立绘和名字
         speakerNameText.text = line.speakerName;
         portrait.sprite = line.portrait;
 
-        // 开始打字机效果
         StartCoroutine(TypeLine(line.text));
     }
 
-    // 打字机效果协程
     IEnumerator TypeLine(string text)
     {
         isTyping = true;
         dialogueText.text = "";
 
-        // 逐字显示
-        foreach (char c in text)
+        foreach (char c in text.ToCharArray())
         {
             dialogueText.text += c;
             yield return new WaitForSeconds(typeSpeed);
@@ -86,65 +77,75 @@ public class DialogueUI : BaseUI
 
         isTyping = false;
 
-        // 如果是自动模式，等待后自动下一句
-        if (autoMode)
-        {
-            autoCoroutine = StartCoroutine(AutoNext());
-        }
+        // 打字结束 → 如果是自动模式，直接启动等待
+        if (autoToggle.isOn)
+            StartAutoWait();
     }
 
-    // 自动模式下的延迟跳转
-    IEnumerator AutoNext()
+    // 自动等待后跳下一句
+    void StartAutoWait()
+    {
+        if (autoWaitCoroutine != null)
+            StopCoroutine(autoWaitCoroutine);
+
+        autoWaitCoroutine = StartCoroutine(AutoWaitCoroutine());
+    }
+
+    IEnumerator AutoWaitCoroutine()
     {
         yield return new WaitForSeconds(autoDelay);
         ShowNextLine();
     }
 
-    // 点击Next按钮的逻辑
     void OnNextClicked()
     {
-        // 如果正在打字，直接跳过打字，显示完整文本
         if (isTyping)
         {
+            // 跳过打字
             StopAllCoroutines();
-            var line = dialogueQueue.Peek();
-            dialogueText.text = line.text;
             isTyping = false;
+            var currentLine = dialogueQueue.Peek();
+            dialogueText.text = currentLine.text;
 
-            // 如果是自动模式，停止自动协程，重新计时
-            if (autoMode)
-            {
-                if (autoCoroutine != null)
-                    StopCoroutine(autoCoroutine);
-                autoCoroutine = StartCoroutine(AutoNext());
-            }
+            // 跳完后如果是自动 → 立刻启动自动
+            if (autoToggle.isOn)
+                StartAutoWait();
         }
-        // 打字结束，显示下一句
         else
         {
-            if (autoCoroutine != null)
-                StopCoroutine(autoCoroutine);
+            // 正常下一句
+            if (autoWaitCoroutine != null)
+                StopCoroutine(autoWaitCoroutine);
+
             ShowNextLine();
         }
     }
 
-    // 切换自动/手动模式
-    void ToggleAutoMode(bool value)
+    void OnAutoToggleChanged(bool isOn)
     {
-        autoMode = value;
-        autoToggle.isOn = value;
-
-        // 如果当前正在自动模式，切换为手动时停止自动协程
-        if (!autoMode && autoCoroutine != null)
+        if (isOn)
         {
-            StopCoroutine(autoCoroutine);
+            // 打开自动：
+            // 如果当前句子已经播完 → 直接启动自动
+            if (!isTyping)
+                StartAutoWait();
+        }
+        else
+        {
+            // 关闭自动：停止等待
+            if (autoWaitCoroutine != null)
+            {
+                StopCoroutine(autoWaitCoroutine);
+                autoWaitCoroutine = null;
+            }
         }
     }
 
-    // 对话结束，关闭界面
     void EndDialogue()
     {
-        StopAllCoroutines();
+        if (autoWaitCoroutine != null)
+            StopCoroutine(autoWaitCoroutine);
+
         UIManager.Instance.Close();
     }
 }

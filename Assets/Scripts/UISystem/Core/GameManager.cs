@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +42,57 @@ public class GameManager : MonoBehaviour
         if(debugMode)Debug.Log("Starting Game...");
         UIManager.Instance.Close(UIType.MainMenu);
         UIManager.Instance.Open(UIType.HUD);
+
+        if (debugMode) StartTestDialogue();
+    }
+
+    // 对话系统调试方法
+    void StartTestDialogue()
+    {
+        Debug.Log("启动调试对话！");
+
+        // 构造测试对话
+        List<DialogueLine> testDialogue = new List<DialogueLine>
+        {
+            new DialogueLine
+            {
+                speakerName = "Test Protagonist", 
+                text = "Greetings! This is the opening line.",
+                portrait = null
+            },
+            new DialogueLine
+            {
+                speakerName = "Test NPC", 
+                text = "And this is the second line!",
+                portrait = null
+            },
+            new DialogueLine
+            {
+                speakerName = "Test ",
+                text = "And this is the third line!",
+                portrait = null
+            },
+            new DialogueLine
+            {
+                speakerName = "Test System",
+                text = "Dialogue test complete! Click Next to close.",
+                portrait = null
+            }
+        };
+
+        // 打开对话UI
+        UIManager.Instance.Open(UIType.Dialogue);
+
+        // 用GetUI方法安全获取DialogueUI
+        BaseUI baseUI = UIManager.Instance.GetUI(UIType.Dialogue);
+        if (baseUI != null && baseUI is DialogueUI dialogueUI)
+        {
+            dialogueUI.StartDialogue(testDialogue);
+        }
+        else
+        {
+            Debug.LogError("DialogueUI 未找到或转换失败！请检查DialogueUI是否已注册到UIManager。");
+        }
     }
 
     // 暂停游戏
