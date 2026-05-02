@@ -6,5 +6,6 @@
     Pause, // 暂停界面
     Settings, // 设置界面
     Ending, // 结局gallery界面
+    EndingDetail, // 结局详情界面
     Codex // 图鉴界面
 }
