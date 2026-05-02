@@ -66,6 +66,23 @@ namespace Assets.Scripts.UISystem
             }
         }
 
+        public List<string> unlockedCodexIds = new List<string>();
+
+        // 解锁一个图鉴
+        public void UnlockCodex(string id)
+        {
+            if (!unlockedCodexIds.Contains(id))
+            {
+                unlockedCodexIds.Add(id);
+                Save();
+            }
+        }
+
+        public bool IsCodexUnlocked(string id)
+        {
+            return unlockedCodexIds.Contains(id);
+        }
+
         // 序列化用的结构
         [Serializable]
         private class SaveData
