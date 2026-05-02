@@ -57,15 +57,17 @@ public class EndingUI : BaseUI
                 }
 
                 // 安全读取解锁状态（如果SaveManager没初始化，就用Inspector的初始值）
+                //bool isUnlocked = data.unlocked;
+                //if (Assets.Scripts.UISystem.SaveManager.Instance != null)
+                //{
+                //    isUnlocked = Assets.Scripts.UISystem.SaveManager.Instance.IsEndingUnlocked(data.id);
+                //}
+                //else
+                //{
+                //    Debug.LogWarning("SaveManager.Instance 未初始化，使用初始解锁状态！");
+                //}
+                // 直接用Inspector里的Unlocked勾选，不读取存档
                 bool isUnlocked = data.unlocked;
-                if (Assets.Scripts.UISystem.SaveManager.Instance != null)
-                {
-                    isUnlocked = Assets.Scripts.UISystem.SaveManager.Instance.IsEndingUnlocked(data.id);
-                }
-                else
-                {
-                    Debug.LogWarning("SaveManager.Instance 未初始化，使用初始解锁状态！");
-                }
 
                 // 更新数据并初始化格子
                 data.unlocked = isUnlocked;

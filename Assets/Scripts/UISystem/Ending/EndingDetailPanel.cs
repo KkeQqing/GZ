@@ -14,14 +14,56 @@ public class EndingDetailPanel : MonoBehaviour
     {
         // 默认隐藏
         gameObject.SetActive(false);
-        closeButton.onClick.AddListener(Hide);
+
+        // 安全绑定关闭按钮
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(Hide);
+        }
+        else
+        {
+            Debug.LogWarning("EndingDetailPanel: closeButton 未赋值！请在Inspector拖入！");
+        }
     }
 
     public void Show(EndingData data)
     {
-        detailImage.sprite = data.image;
-        detailTitle.text = data.name;
-        detailDescription.text = data.description;
+        // 先检查data是否为空
+        if (data == null)
+        {
+            Debug.LogError("EndingDetailPanel: 传入的EndingData为空！");
+            return;
+        }
+
+        // 逐个检查引用，防止空引用报错
+        if (detailImage != null)
+        {
+            detailImage.sprite = data.image;
+        }
+        else
+        {
+            Debug.LogError("EndingDetailPanel: detailImage 未赋值！请拖入详情图片！");
+        }
+
+        if (detailTitle != null)
+        {
+            detailTitle.text = data.name;
+        }
+        else
+        {
+            Debug.LogError("EndingDetailPanel: detailTitle 未赋值！请拖入标题文本！");
+        }
+
+        if (detailDescription != null)
+        {
+            detailDescription.text = data.description;
+        }
+        else
+        {
+            Debug.LogError("EndingDetailPanel: detailDescription 未赋值！请拖入描述文本！");
+        }
+
+        // 显示面板
         gameObject.SetActive(true);
     }
 
