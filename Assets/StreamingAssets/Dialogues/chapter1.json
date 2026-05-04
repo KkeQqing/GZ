@@ -1,0 +1,19 @@
+﻿{
+  "dialogues": [
+    {
+      "speakerName": "主角",
+      "text": "你好！这是第一句对话。",
+      "portraitPath": ""
+    },
+    {
+      "speakerName": "NPC",
+      "text": "欢迎来到游戏世界！",
+      "portraitPath": ""
+    },
+    {
+      "speakerName": "系统",
+      "text": "对话测试完成！",
+      "portraitPath": ""
+    }
+  ]
+}
