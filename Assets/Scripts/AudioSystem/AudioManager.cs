@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [DefaultExecutionOrder(-1)]
 public class AudioManager : MonoBehaviour
@@ -13,6 +13,13 @@ public class AudioManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // ✅ 游戏启动时自动加载音量并应用
+            float savedVolume = LoadVolume();
+            if (bgm != null)
+            {
+                bgm.volume = savedVolume;
+            }
         }
         else
         {
@@ -27,6 +34,7 @@ public class AudioManager : MonoBehaviour
             bgm.volume = value;
         }
         PlayerPrefs.SetFloat("volume", value);
+        PlayerPrefs.Save(); // ✅ 确保保存
     }
 
     public float LoadVolume()
