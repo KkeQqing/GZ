@@ -1,19 +1,17 @@
 ﻿{
-  "dialogues": [
+  "chapterName": "第二章：森林迷雾",
+  "lines": [
     {
-      "speakerName": "主角",
-      "text": "你好！这是第一句对话。",
-      "portraitPath": ""
+      "charId": "npc_02",
+      "speakerName": "森林精灵",
+      "text": "不要轻易走进迷雾深处……",
+      "portraitPath": "Characters/NPC/NPC2/npc2_normal"
     },
     {
-      "speakerName": "NPC",
-      "text": "欢迎来到游戏世界！",
-      "portraitPath": ""
-    },
-    {
-      "speakerName": "系统",
-      "text": "对话测试完成！",
-      "portraitPath": ""
+      "charId": "player_01",
+      "speakerName": "旅人",
+      "text": "迷雾里究竟藏着什么？",
+      "portraitPath": "Characters/Player/player_normal"
     }
   ]
 }

@@ -1,19 +1,29 @@
 ﻿{
-  "dialogues": [
+  "chapterName": "第一章：初入世界",
+  "lines": [
     {
-      "speakerName": "主角",
-      "text": "你好！这是第一句对话。",
-      "portraitPath": ""
+      "charId": "player_01",
+      "speakerName": "Player",
+      "text": "我终于来到这片陌生的大陆了。",
+      "portraitPath": "Characters/Player/player_normal"
     },
     {
-      "speakerName": "NPC",
-      "text": "欢迎来到游戏世界！",
-      "portraitPath": ""
+      "charId": "npc_01",
+      "speakerName": "NPC_1",
+      "text": "年轻人",
+      "portraitPath": "Characters/NPC/NPC1/npc1_normal"
     },
     {
-      "speakerName": "系统",
-      "text": "对话测试完成！",
-      "portraitPath": ""
+      "charId": "npc_01",
+      "speakerName": "NPC_1",
+      "text": "你是从远方来的吧？",
+      "portraitPath": "Characters/NPC/NPC1/npc1_thinking"
+    },
+    {
+      "charId": "player_01",
+      "speakerName": "Player",
+      "text": "是的，我想探寻这片土地的秘密。",
+      "portraitPath": "Characters/Player/player_happy"
     }
   ]
 }

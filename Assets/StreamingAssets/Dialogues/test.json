@@ -1,18 +1,22 @@
 ﻿{
-  "dialogues": [
+  "chapterName": "Dialogue Test",
+  "lines": [
     {
-      "speakerName": "主角",
-      "text": "你好！这是第一句对话。",
-      "portraitPath": ""
+      "charId": "player_01",
+      "speakerName": "Player",
+      "text": "Hello! This is the first line of dialogue.",
+      "portraitPath": "Characters/Player/player_normal"
     },
     {
+      "charId": "npc_01",
       "speakerName": "NPC",
-      "text": "欢迎来到游戏世界！",
-      "portraitPath": ""
+      "text": "Welcome to the game world!",
+      "portraitPath": "Characters/NPC/NPC1/npc1_normal"
     },
     {
-      "speakerName": "系统",
-      "text": "对话测试完成！",
+      "charId": "system_01",
+      "speakerName": "System",
+      "text": "Dialogue test completed!",
       "portraitPath": ""
     }
   ]

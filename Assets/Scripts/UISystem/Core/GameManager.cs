@@ -49,49 +49,22 @@ public class GameManager : MonoBehaviour
     // 对话系统调试方法
     void StartTestDialogue()
     {
-        Debug.Log("启动调试对话！");
+        // 加载第一章
+        DialogueManager.Instance.LoadChapter("test.json");
+        var dialogueLines = DialogueManager.Instance.GetCurrentDialogueLines();
 
-        // 构造测试对话
-        List<DialogueLine> testDialogue = new List<DialogueLine>
+        if (dialogueLines == null || dialogueLines.Count == 0)
         {
-            new DialogueLine
-            {
-                speakerName = "Test Protagonist", 
-                text = "Greetings! This is the opening line.",
-                portrait = null
-            },
-            new DialogueLine
-            {
-                speakerName = "Test NPC", 
-                text = "And this is the second line!",
-                portrait = null
-            },
-            new DialogueLine
-            {
-                speakerName = "Test ",
-                text = "And this is the third line!",
-                portrait = null
-            },
-            new DialogueLine
-            {
-                speakerName = "Test System",
-                text = "Dialogue test complete! Click Next to close.",
-                portrait = null
-            }
-        };
+            Debug.LogError("章节对话为空！");
+            return;
+        }
 
         // 打开对话UI
         UIManager.Instance.Open(UIType.Dialogue);
-
-        // 用GetUI方法安全获取DialogueUI
         BaseUI baseUI = UIManager.Instance.GetUI(UIType.Dialogue);
-        if (baseUI != null && baseUI is DialogueUI dialogueUI)
+        if (baseUI is DialogueUI dui)
         {
-            dialogueUI.StartDialogue(testDialogue);
-        }
-        else
-        {
-            Debug.LogError("DialogueUI 未找到或转换失败！请检查DialogueUI是否已注册到UIManager。");
+            dui.StartDialogue(dialogueLines);
         }
     }
 

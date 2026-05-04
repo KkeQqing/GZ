@@ -58,8 +58,16 @@ public class DialogueUI : BaseUI
         }
 
         var line = dialogueQueue.Dequeue();
-        speakerNameText.text = line.speakerName;
-        portrait.sprite = line.portrait;
+
+        if (speakerNameText != null)
+            speakerNameText.text = line.speakerName;
+
+        // ✅ 干净调用，不关心路径
+        if (portrait != null)
+        {
+            portrait.sprite = DialogueManager.Instance.LoadPortrait(line.portraitPath);
+            portrait.enabled = portrait.sprite != null;
+        }
 
         StartCoroutine(TypeLine(line.text));
     }
