@@ -109,11 +109,21 @@ public class DialogueUI : BaseUI
     {
         if (isTyping)
         {
-            // 跳过打字
+            // 跳过打字，显示完整文本
             StopAllCoroutines();
             isTyping = false;
-            var currentLine = dialogueQueue.Peek();
-            dialogueText.text = currentLine.text;
+
+            // 关键：如果队列还有元素，才Peek
+            if (dialogueQueue.Count > 0)
+            {
+                var currentLine = dialogueQueue.Peek();
+                dialogueText.text = currentLine.text;
+            }
+            else
+            {
+                // 队列已经空了，直接显示当前完整文本
+                dialogueText.text = dialogueText.text;
+            }
 
             // 跳完后如果是自动 → 立刻启动自动
             if (autoToggle.isOn)
