@@ -43,30 +43,42 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.Close(UIType.MainMenu);
         UIManager.Instance.Open(UIType.HUD);
 
-        if (debugMode) StartTestDialogue();
+        if (debugMode) StartDialogueWithChapter("Chapter1.json");
     }
 
     // 对话系统调试方法
-    void StartTestDialogue()
+    public void StartDialogueWithChapter(string chapterFileName)
     {
-        // 加载第一章
-        DialogueManager.Instance.LoadChapter("test.json");
-        var dialogueLines = DialogueManager.Instance.GetCurrentDialogueLines();
-
-        if (dialogueLines == null || dialogueLines.Count == 0)
+        if (DialogueManager.Instance == null)
         {
-            Debug.LogError("章节对话为空！");
+            Debug.LogError("DialogueManager 不存在！");
             return;
         }
 
-        // 打开对话UI
-        UIManager.Instance.Open(UIType.Dialogue);
-        BaseUI baseUI = UIManager.Instance.GetUI(UIType.Dialogue);
-        if (baseUI is DialogueUI dui)
+        // 1. 加载JSON
+        DialogueManager.Instance.LoadChapter(chapterFileName);
+        var lines = DialogueManager.Instance.GetCurrentDialogueLines();
+
+        if (lines == null || lines.Count == 0)
         {
-            dui.StartDialogue(dialogueLines);
+            Debug.LogError($"章节 {chapterFileName} 无内容！");
+            return;
+        }
+
+        // 2. 打开UI
+        UIManager.Instance.Open(UIType.Dialogue);
+        BaseUI ui = UIManager.Instance.GetUI(UIType.Dialogue);
+
+        if (ui is DialogueUI dialogueUI)
+        {
+            dialogueUI.StartDialogue(lines);
+        }
+        else
+        {
+            Debug.LogError("获取 DialogueUI 失败！");
         }
     }
+
 
     // 暂停游戏
     public void TogglePause()
