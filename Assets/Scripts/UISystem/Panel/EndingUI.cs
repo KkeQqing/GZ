@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections.Generic;
+using Assets.Scripts.UISystem;
 
 public class EndingUI : BaseUI
 {
-    public static EndingUI Instance; 
+    public static EndingUI Instance;
 
     [Header("场景引用")]
     public List<EndingItem> endingItems; // 把场景里的4个EndingItem拖进来
@@ -14,7 +15,7 @@ public class EndingUI : BaseUI
 
     protected override void Awake()
     {
-        base.Awake();  
+        base.Awake();
 
         if (Instance == null)
             Instance = this;
@@ -29,7 +30,7 @@ public class EndingUI : BaseUI
         Refresh();
     }
 
-    // 刷新所有格子的状态（加了完整的空引用保护）
+    // 刷新所有格子的状态
     public void Refresh()
     {
         // 先检查endingItems和endings是否为空
@@ -38,6 +39,8 @@ public class EndingUI : BaseUI
             Debug.LogError("EndingUI: endingItems 或 endings 列表为空！请在Inspector赋值！");
             return;
         }
+
+        Debug.Log($"[EndingUI] 开始刷新，共 {endings.Count} 个结局");
 
         for (int i = 0; i < endingItems.Count; i++)
         {
@@ -59,17 +62,16 @@ public class EndingUI : BaseUI
                 }
 
                 // 安全读取解锁状态（如果SaveManager没初始化，就用Inspector的初始值）
-                //bool isUnlocked = data.unlocked;
-                //if (Assets.Scripts.UISystem.SaveManager.Instance != null)
-                //{
-                //    isUnlocked = Assets.Scripts.UISystem.SaveManager.Instance.IsEndingUnlocked(data.id);
-                //}
-                //else
-                //{
-                //    Debug.LogWarning("SaveManager.Instance 未初始化，使用初始解锁状态！");
-                //}
-                // 直接用Inspector里的Unlocked勾选，不读取存档
                 bool isUnlocked = data.unlocked;
+                if (SaveManager.Instance != null)
+                {
+                    isUnlocked = SaveManager.Instance.IsEndingUnlocked(data.id);
+                    Debug.Log($"[EndingUI] 结局 {data.name} (id={data.id})：存档状态={isUnlocked}");
+                }
+                else
+                {
+                    Debug.LogWarning("SaveManager.Instance 未初始化，使用初始解锁状态！");
+                }
 
                 // 更新数据并初始化格子
                 data.unlocked = isUnlocked;

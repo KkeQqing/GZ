@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+//在任何需要更新血量的地方（比如玩家受伤、加血逻辑），都可以这样调用：
+// GameManager.Instance.DamageHUD(20); // 扣20血
+// GameManager.Instance.HealHUD(15);   // 加15血
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
@@ -49,8 +53,6 @@ public class GameManager : MonoBehaviour
             StartDialogueWithChapter("Chapter1.json");
         }
 
-        DamageHUD(20f);
-        HealHUD(10f);
     }
 
 
