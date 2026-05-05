@@ -1,50 +1,48 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-//在任何需要更新血量的地方（比如玩家受伤、加血逻辑），都可以这样调用：
-// GameManager.Instance.DamageHUD(20); // 扣20血
-// GameManager.Instance.HealHUD(15);   // 加15血
+/// <summary>
+/// 外部调整血量：调用 GameManager.Instance.DamageHUD(10) 来减少血量，调用 GameManager.Instance.HealHUD(10) 来增加血量。
+/// 外部触发某一章节对话：调用 GameManager.Instance.StartDialogueWithChapter("Chapter1.json") 来加载并显示章节对话，参数是 StreamingAssets/Dialogues 文件夹下的 JSON 文件名。
+/// </summary>
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     private bool isPaused;
-
-    public bool debugMode = true; // 是否启用调试模式
-
+    public bool debugMode = true;
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // 确保GameManager在场景切换时不会被销毁
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // 如果已经存在一个实例，销毁新的实例
+            Destroy(gameObject);
         }
-
     }
 
     void Start()
     {
         if (UIManager.Instance != null)
         {
-            if(debugMode) Debug.Log("尝试打开主菜单...");
+            if (debugMode) Debug.Log("打开主菜单");
             UIManager.Instance.Open(UIType.MainMenu);
         }
         else
         {
-            if(debugMode) Debug.LogError("UIManager 没找到！");
+            if (debugMode) Debug.LogError("UIManager 丢失");
         }
     }
 
     // 开始游戏
     public void StartGame()
     {
-        if(debugMode)Debug.Log("Starting Game...");
+        if (debugMode) Debug.Log("开始游戏");
         UIManager.Instance.Close();
         UIManager.Instance.Open(UIType.HUD);
 
@@ -52,30 +50,26 @@ public class GameManager : MonoBehaviour
         {
             StartDialogueWithChapter("Chapter1.json");
         }
-
     }
 
-
-    // 对话系统调试方法
+    // 对话调试
     public void StartDialogueWithChapter(string chapterFileName)
     {
         if (DialogueManager.Instance == null)
         {
-            Debug.LogError("DialogueManager 不存在！");
+            Debug.LogError("DialogueManager 不存在");
             return;
         }
 
-        // 1. 加载JSON
         DialogueManager.Instance.LoadChapter(chapterFileName);
         var lines = DialogueManager.Instance.GetCurrentDialogueLines();
 
         if (lines == null || lines.Count == 0)
         {
-            Debug.LogError($"章节 {chapterFileName} 无内容！");
+            Debug.LogError("章节无内容");
             return;
         }
 
-        // 2. 打开UI
         UIManager.Instance.Open(UIType.Dialogue);
         BaseUI ui = UIManager.Instance.GetUI(UIType.Dialogue);
 
@@ -83,18 +77,13 @@ public class GameManager : MonoBehaviour
         {
             dialogueUI.StartDialogue(lines);
         }
-        else
-        {
-            Debug.LogError("获取 DialogueUI 失败！");
-        }
     }
 
-    // 暂停游戏
+    // 暂停开关
     public void TogglePause()
     {
         isPaused = !isPaused;
-
-        Time.timeScale = isPaused ? 0f : 1f;
+        Time.timeScale = isPaused ? 0 : 1;
 
         if (isPaused)
             UIManager.Instance.Open(UIType.Pause);
@@ -102,9 +91,11 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.Close();
     }
 
-    // 扣血
+    // 血量调整接口
     public void DamageHUD(float damage)
     {
+        if (UIManager.Instance == null) return;
+
         HUDUI hud = UIManager.Instance.GetUI(UIType.HUD) as HUDUI;
         if (hud != null)
         {
@@ -112,18 +103,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // 加血
-    public void HealHUD(float heal)
+    public void HealHUD(float amount)
     {
+        if (UIManager.Instance == null) return;
+
         HUDUI hud = UIManager.Instance.GetUI(UIType.HUD) as HUDUI;
         if (hud != null)
         {
-            hud.Heal(heal);
+            hud.Heal(amount);
         }
     }
 
     public void TestClick()
     {
-        Debug.Log("按钮被点到了！");
+        Debug.Log("按钮点击成功！");
     }
 }

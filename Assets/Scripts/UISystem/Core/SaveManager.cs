@@ -160,7 +160,7 @@ namespace Assets.Scripts.UISystem
             }
         }
 
-        // 序列化用的结构（修复：同时保存结局 + 图鉴）
+        // 序列化用的结构（同时保存结局 + 图鉴）
         [Serializable]
         private class SaveData
         {

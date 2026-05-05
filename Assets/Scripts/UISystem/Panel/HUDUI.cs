@@ -2,6 +2,10 @@
 using UnityEngine.UI;
 using System.Collections;
 
+/// <summary>
+/// debug模式下，Z 键扣血 20，X 键回血 10
+/// 血条UI：不直接被外部调用，统一由 GameManager 访问
+/// </summary>
 public class HUDUI : BaseUI
 {
     [Header("HUD 引用")]
@@ -16,7 +20,6 @@ public class HUDUI : BaseUI
     private float maxHP;
     private float targetFillAmount;
 
-    // 单例防止重复
     public static HUDUI Instance;
 
     protected override void Awake()
@@ -29,7 +32,6 @@ public class HUDUI : BaseUI
         if (pauseButton != null)
             pauseButton.onClick.AddListener(OnPause);
 
-        // 只初始化一次
         maxHP = 100;
         currentHP = maxHP;
     }
@@ -38,7 +40,6 @@ public class HUDUI : BaseUI
     {
         base.OnShow();
 
-        // 防止协程残留
         if (hpCoroutine != null)
         {
             StopCoroutine(hpCoroutine);
@@ -48,6 +49,26 @@ public class HUDUI : BaseUI
         SetHPImmediate(currentHP, maxHP);
     }
 
+    // DEBUG 快捷键
+    private void Update()
+    {
+        if (!debugMode || !gameObject.activeInHierarchy)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            TakeDamage(20);
+            Debug.Log("<color=orange>[DEBUG] Z 扣血 20</color>");
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Heal(10);
+            Debug.Log("<color=green>[DEBUG] X 回血 10</color>");
+        }
+    }
+
+    // 这些方法不建议外部直接调用，统一走 GameManager
     public void TakeDamage(float damage)
     {
         currentHP = Mathf.Max(0, currentHP - damage);
@@ -99,7 +120,6 @@ public class HUDUI : BaseUI
         hpBar.fillAmount = Mathf.Clamp01(current / max);
     }
 
-    // 重新开始游戏时重置血量
     public void ResetFullHP()
     {
         currentHP = maxHP;
