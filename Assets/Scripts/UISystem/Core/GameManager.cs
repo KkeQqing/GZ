@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 
     private bool isPaused;
 
-    private bool debugMode = true; // 是否启用调试模式
+    public bool debugMode = true; // 是否启用调试模式
+
 
     void Awake()
     {
@@ -43,8 +44,15 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.Close();
         UIManager.Instance.Open(UIType.HUD);
 
-        if (debugMode) StartDialogueWithChapter("Chapter1.json");
+        if (debugMode)
+        {
+            StartDialogueWithChapter("Chapter1.json");
+        }
+
+        DamageHUD(20f);
+        HealHUD(10f);
     }
+
 
     // 对话系统调试方法
     public void StartDialogueWithChapter(string chapterFileName)
@@ -79,7 +87,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     // 暂停游戏
     public void TogglePause()
     {
@@ -93,7 +100,25 @@ public class GameManager : MonoBehaviour
             UIManager.Instance.Close();
     }
 
+    // 扣血
+    public void DamageHUD(float damage)
+    {
+        HUDUI hud = UIManager.Instance.GetUI(UIType.HUD) as HUDUI;
+        if (hud != null)
+        {
+            hud.TakeDamage(damage);
+        }
+    }
 
+    // 加血
+    public void HealHUD(float heal)
+    {
+        HUDUI hud = UIManager.Instance.GetUI(UIType.HUD) as HUDUI;
+        if (hud != null)
+        {
+            hud.Heal(heal);
+        }
+    }
 
     public void TestClick()
     {
