@@ -6,23 +6,17 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    private Dictionary<UIType, BaseUI> uiDict = new(); // 存储UI实例的字典，键为UI类型，值为对应的UI实例
-    private Stack<BaseUI> uiStack = new(); // UI栈，管理当前打开的UI顺序，最新打开的UI在栈顶
+    private Dictionary<UIType, BaseUI> uiDict = new();
+    private Stack<BaseUI> uiStack = new();
 
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // 确保UIManager在场景切换时不会被销毁
-        }
-        else
-        {
-            Destroy(gameObject); // 如果已经存在一个实例，销毁新的实例
-        }
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    // 注册UI实例
     public void Register(BaseUI ui)
     {
         if (!uiDict.ContainsKey(ui.uiType))
@@ -33,40 +27,48 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // 打开UI的方法，根据UI类型从字典中获取对应的UI实例，并将其显示在屏幕上，同时将其压入UI栈中
     public void Open(UIType type)
     {
-        if (!uiDict.ContainsKey(type)) return;
+        if (!uiDict.TryGetValue(type, out var ui)) return;
 
-        // 隐藏旧界面
+        // 栈顶相同就不重复打开
+        if (uiStack.Count > 0 && uiStack.Peek() == ui)
+            return;
+
+        // 隐藏当前
         if (uiStack.Count > 0)
             uiStack.Peek().Hide();
 
-        BaseUI ui = uiDict[type];
-        ui.Show();
         uiStack.Push(ui);
+        ui.Show();
     }
 
-    // 关闭UI
+    // 关闭顶层界面
     public void Close()
     {
         if (uiStack.Count == 0) return;
 
-        BaseUI top = uiStack.Pop();
+        var top = uiStack.Pop();
         top.Hide();
 
+        // 显示前一层
         if (uiStack.Count > 0)
             uiStack.Peek().Show();
     }
 
-    // 安全获取UI实例
-    public BaseUI GetUI(UIType type)
+    // 关闭所有，回到主界面专用
+    public void CloseAll()
     {
-        if (uiDict.TryGetValue(type, out var ui))
+        while (uiStack.Count > 0)
         {
-            return ui;
+            var top = uiStack.Pop();
+            top.Hide();
         }
-        return null;
     }
 
+    public BaseUI GetUI(UIType type)
+    {
+        uiDict.TryGetValue(type, out var ui);
+        return ui;
+    }
 }

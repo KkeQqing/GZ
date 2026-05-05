@@ -9,76 +9,70 @@ public class HUDUI : BaseUI
     public Button pauseButton;
 
     [Header("血条动画")]
-    [Tooltip("血条变化速度，越大越快")]
     public float fillSpeed = 0.5f;
 
     private Coroutine hpCoroutine;
-    private float currentHP;  // 当前血量
-    private float maxHP;     // 最大血量
+    private float currentHP;
+    private float maxHP;
     private float targetFillAmount;
+
+    // 单例防止重复
+    public static HUDUI Instance;
 
     protected override void Awake()
     {
         base.Awake();
+
+        if (Instance == null) Instance = this;
+        else { Destroy(gameObject); return; }
+
         if (pauseButton != null)
-        {
             pauseButton.onClick.AddListener(OnPause);
-        }
+
+        // 只初始化一次
+        maxHP = 100;
+        currentHP = maxHP;
     }
 
-    // 打开界面时，初始化满血
     protected override void OnShow()
     {
         base.OnShow();
-        maxHP = 100;       // 默认最大血量100
-        currentHP = maxHP; // 初始满血
+
+        // 防止协程残留
+        if (hpCoroutine != null)
+        {
+            StopCoroutine(hpCoroutine);
+            hpCoroutine = null;
+        }
+
         SetHPImmediate(currentHP, maxHP);
     }
 
-    // 受伤
     public void TakeDamage(float damage)
     {
-        currentHP = Mathf.Max(0, currentHP - damage); // 防止负数
+        currentHP = Mathf.Max(0, currentHP - damage);
         UpdateHP(currentHP, maxHP);
     }
 
-    // 回血
     public void Heal(float amount)
     {
-        currentHP = Mathf.Min(maxHP, currentHP + amount); // 防止超过上限
+        currentHP = Mathf.Min(maxHP, currentHP + amount);
         UpdateHP(currentHP, maxHP);
     }
 
-    //  受伤测试（示例：扣30血）
-    public void TestTakeDamage30()
-    {
-        TakeDamage(30);
-    }
-
-    // 回血测试（示例：回20血）
-    public void TestHeal20()
-    {
-        Heal(20);
-    }
-
-    // 平滑更新血条
     public void UpdateHP(float current, float max)
     {
         if (hpBar == null || max <= 0) return;
 
         targetFillAmount = Mathf.Clamp01(current / max);
 
-        if (gameObject.activeInHierarchy)
-        {
-            if (hpCoroutine != null)
-                StopCoroutine(hpCoroutine);
+        if (hpCoroutine != null)
+            StopCoroutine(hpCoroutine);
 
+        if (gameObject.activeInHierarchy)
             hpCoroutine = StartCoroutine(UpdateHPSmooth());
-        }
         else
-        {
             hpBar.fillAmount = targetFillAmount;
-        }
     }
 
     IEnumerator UpdateHPSmooth()
@@ -86,27 +80,29 @@ public class HUDUI : BaseUI
         while (!Mathf.Approximately(hpBar.fillAmount, targetFillAmount))
         {
             hpBar.fillAmount = Mathf.MoveTowards(
-                hpBar.fillAmount,
-                targetFillAmount,
-                fillSpeed * Time.deltaTime
-            );
+                hpBar.fillAmount, targetFillAmount, fillSpeed * Time.deltaTime);
             yield return null;
         }
         hpBar.fillAmount = targetFillAmount;
         hpCoroutine = null;
     }
 
-    // 暂停按钮
     public void OnPause()
     {
-        GameManager.Instance.TogglePause();
         UIManager.Instance.Open(UIType.Pause);
+        GameManager.Instance.TogglePause();
     }
 
-    // 立即设置血量（无动画）
     public void SetHPImmediate(float current, float max)
     {
         if (hpBar == null || max <= 0) return;
         hpBar.fillAmount = Mathf.Clamp01(current / max);
+    }
+
+    // 重新开始游戏时重置血量
+    public void ResetFullHP()
+    {
+        currentHP = maxHP;
+        SetHPImmediate(currentHP, maxHP);
     }
 }
