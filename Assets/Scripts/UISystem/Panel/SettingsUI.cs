@@ -13,8 +13,10 @@ public class SettingsUI : BaseUI
 
     private float oldVolume;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         saveBtn.onClick.AddListener(SaveSettings);
         backBtn.onClick.AddListener(OnBack);
         resetBtn.onClick.AddListener(OnReset);

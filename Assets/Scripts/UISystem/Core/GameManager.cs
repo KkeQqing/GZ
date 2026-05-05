@@ -27,12 +27,12 @@ public class GameManager : MonoBehaviour
     {
         if (UIManager.Instance != null)
         {
-            Debug.Log("尝试打开主菜单...");
+            if(debugMode) Debug.Log("尝试打开主菜单...");
             UIManager.Instance.Open(UIType.MainMenu);
         }
         else
         {
-            Debug.LogError("UIManager 没找到！");
+            if(debugMode) Debug.LogError("UIManager 没找到！");
         }
     }
 
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         if(debugMode)Debug.Log("Starting Game...");
-        UIManager.Instance.Close(UIType.MainMenu);
+        UIManager.Instance.Close();
         UIManager.Instance.Open(UIType.HUD);
 
         if (debugMode) StartDialogueWithChapter("Chapter1.json");

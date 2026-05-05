@@ -3,14 +3,15 @@
 public abstract class BaseUI : MonoBehaviour
 {
     public UIType uiType;
+    public bool debugMode = true; // 是否启用调试模式
 
-    void Awake()
+    protected virtual void Awake()
     {
-        Debug.Log($"[BaseUI] 正在注册: {uiType}"); 
         // 注册自己
         if (UIManager.Instance != null)
         {
             UIManager.Instance.Register(this);
+            if (debugMode) Debug.Log($"[BaseUI] 注册成功: {uiType}");
         }
     }
 

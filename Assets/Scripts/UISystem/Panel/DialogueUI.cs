@@ -21,8 +21,10 @@ public class DialogueUI : BaseUI
     private bool isTyping;
     private Coroutine autoWaitCoroutine; // 自动等待协程
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         nextBtn.onClick.AddListener(OnNextClicked);
         autoToggle.onValueChanged.AddListener(OnAutoToggleChanged);
     }

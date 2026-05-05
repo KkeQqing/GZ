@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EndingUI : BaseUI
 {
-    public static EndingUI Instance;
+    public static EndingUI Instance; 
 
     [Header("场景引用")]
     public List<EndingItem> endingItems; // 把场景里的4个EndingItem拖进来
@@ -12,8 +12,10 @@ public class EndingUI : BaseUI
     [Header("结局数据")]
     public List<EndingData> endings; // 在Inspector里配置4个结局数据
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();  
+
         if (Instance == null)
             Instance = this;
         else

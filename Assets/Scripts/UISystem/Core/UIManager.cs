@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // 注册UI实例的方法，通常在UI对象的Awake或Start方法中调用
+    // 注册UI实例
     public void Register(BaseUI ui)
     {
         if (!uiDict.ContainsKey(ui.uiType))
@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
     {
         if (!uiDict.ContainsKey(type)) return;
 
+        // 隐藏旧界面
         if (uiStack.Count > 0)
             uiStack.Peek().Hide();
 
@@ -46,7 +47,7 @@ public class UIManager : MonoBehaviour
         uiStack.Push(ui);
     }
 
-    // 关闭UI的方法，从UI栈中弹出当前打开的UI实例，并将其隐藏，同时如果栈中还有其他UI实例，则将其显示在屏幕上
+    // 关闭UI
     public void Close()
     {
         if (uiStack.Count == 0) return;
@@ -58,27 +59,7 @@ public class UIManager : MonoBehaviour
             uiStack.Peek().Show();
     }
 
-    // 新增：支持指定类型关闭
-    public void Close(UIType type)
-    {
-        if (!uiDict.ContainsKey(type)) return;
-
-        // 如果栈顶不是要关闭的那个，说明它不在最上面，逻辑上可能需要处理
-        // 但为了简单，我们直接从栈里移除（这里逻辑较复杂，建议先用方案一）
-
-        // 简单的做法：如果栈顶是它，就弹出
-        if (uiStack.Count > 0 && uiStack.Peek().uiType == type)
-        {
-            BaseUI top = uiStack.Pop();
-            top.Hide();
-
-            // 恢复前一个
-            if (uiStack.Count > 0)
-                uiStack.Peek().Show();
-        }
-    }
-
-    // 安全获取UI实例的方法
+    // 安全获取UI实例
     public BaseUI GetUI(UIType type)
     {
         if (uiDict.TryGetValue(type, out var ui))

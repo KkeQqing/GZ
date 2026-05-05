@@ -19,16 +19,15 @@ public class CodexUI : BaseUI
     public Button abilityBtn;
     public Button backButton;
 
-    [Header("调试")]
-    public bool debugMode = true;
-
     [Header("数据")]
     public List<CodexData> allCodexData;
 
     private CodexType currentType = CodexType.Monster;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
