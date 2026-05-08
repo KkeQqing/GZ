@@ -10,6 +10,7 @@ public class HUDUI : BaseUI
 {
     [Header("HUD 引用")]
     public Image hpBar;
+    public Image heart; 
     public Button pauseButton;
 
     [Header("血条动画")]
@@ -83,7 +84,7 @@ public class HUDUI : BaseUI
 
     public void UpdateHP(float current, float max)
     {
-        if (hpBar == null || max <= 0) return;
+        if (hpBar == null || heart == null || max <= 0) return;
 
         targetFillAmount = Mathf.Clamp01(current / max);
 
@@ -93,18 +94,30 @@ public class HUDUI : BaseUI
         if (gameObject.activeInHierarchy)
             hpCoroutine = StartCoroutine(UpdateHPSmooth());
         else
+        {
             hpBar.fillAmount = targetFillAmount;
+            heart.fillAmount = targetFillAmount;
+        }
     }
 
     IEnumerator UpdateHPSmooth()
     {
         while (!Mathf.Approximately(hpBar.fillAmount, targetFillAmount))
         {
+            // 血条和心形 同步平滑变化
             hpBar.fillAmount = Mathf.MoveTowards(
                 hpBar.fillAmount, targetFillAmount, fillSpeed * Time.deltaTime);
+
+            heart.fillAmount = Mathf.MoveTowards(
+                heart.fillAmount, targetFillAmount, fillSpeed * Time.deltaTime);
+
             yield return null;
         }
+
+        // 赋值
         hpBar.fillAmount = targetFillAmount;
+        heart.fillAmount = targetFillAmount;
+
         hpCoroutine = null;
     }
 
@@ -116,8 +129,11 @@ public class HUDUI : BaseUI
 
     public void SetHPImmediate(float current, float max)
     {
-        if (hpBar == null || max <= 0) return;
-        hpBar.fillAmount = Mathf.Clamp01(current / max);
+        if (hpBar == null || heart == null || max <= 0) return;
+
+        float fill = Mathf.Clamp01(current / max);
+        hpBar.fillAmount = fill;
+        heart.fillAmount = fill;
     }
 
     public void ResetFullHP()

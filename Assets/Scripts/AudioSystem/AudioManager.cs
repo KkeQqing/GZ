@@ -14,7 +14,7 @@ public class AudioManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // ✅ 游戏启动时自动加载音量并应用
+            // 游戏启动时自动加载音量并应用
             float savedVolume = LoadVolume();
             if (bgm != null)
             {
@@ -34,7 +34,7 @@ public class AudioManager : MonoBehaviour
             bgm.volume = value;
         }
         PlayerPrefs.SetFloat("volume", value);
-        PlayerPrefs.Save(); // ✅ 确保保存
+        PlayerPrefs.Save(); // 确保保存
     }
 
     public float LoadVolume()

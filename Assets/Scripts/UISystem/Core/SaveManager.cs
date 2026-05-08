@@ -37,7 +37,7 @@ namespace Assets.Scripts.UISystem
             Load();
         }
 
-        // ====================== 测试方法：Debug 模式解锁结局1 ======================
+        // 测试方法：Debug 模式解锁结局1
         private void Update()
         {
             // 按 L 键 解锁结局1（对应你数据里的id "1"）
@@ -91,7 +91,6 @@ namespace Assets.Scripts.UISystem
                 }
             }
         }
-        // ======================================================================
 
         // 解锁一个结局
         public void UnlockEnding(string endingId)

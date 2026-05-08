@@ -9,7 +9,7 @@ public class DialogueManager : MonoBehaviour
 
     private DialogueChapter currentChapter;
 
-    // ✅ 根源级修复：这里统一配置你的资源文件夹
+    // 统一配置资源文件夹
     private readonly string PORTRAIT_FOLDER = "UIResources/";
 
     void Awake()
@@ -45,14 +45,12 @@ public class DialogueManager : MonoBehaviour
         return currentChapter?.lines;
     }
 
-    /// <summary>
-    /// 全局统一加载立绘（根源修复）
-    /// </summary>
+    // 全局统一加载立绘
     public Sprite LoadPortrait(string resPath)
     {
         if (string.IsNullOrEmpty(resPath)) return null;
 
-        // ✅ 自动拼接你的 UIResources 路径
+        // 自动拼接 UIResources 路径
         string fullPath = PORTRAIT_FOLDER + resPath;
         Sprite sprite = Resources.Load<Sprite>(fullPath);
 

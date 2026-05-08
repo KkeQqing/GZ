@@ -4,6 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 外部调整血量：调用 GameManager.Instance.DamageHUD(10) 来减少血量，调用 GameManager.Instance.HealHUD(10) 来增加血量。
 /// 外部触发某一章节对话：调用 GameManager.Instance.StartDialogueWithChapter("Chapter1.json") 来加载并显示章节对话，参数是 StreamingAssets/Dialogues 文件夹下的 JSON 文件名。
+/// debug模式下：可以在 Start() 方法中直接调用 StartDialogueWithChapter 来测试对话系统
 /// </summary>
 
 public class GameManager : MonoBehaviour
