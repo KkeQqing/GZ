@@ -97,3 +97,13 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# auto-added ignore rules
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store
