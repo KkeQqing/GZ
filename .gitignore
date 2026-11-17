@@ -107,3 +107,6 @@ InitTestScene*.unity*
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# auto-added ignore rules
+.workbuddy/
