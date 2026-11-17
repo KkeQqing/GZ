@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.Profiling;
 
 public enum RewindPhase
 {
@@ -68,7 +69,9 @@ public class GlobalRewindManager : MonoBehaviour
         {
             if(entity != null)
             {
+                Profiler.BeginSample("RecordState");
                 entity.RecordState();
+                Profiler.EndSample();
             }
         }
     }
